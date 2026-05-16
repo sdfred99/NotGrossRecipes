@@ -1,0 +1,160 @@
+'use client';
+
+import styles from "./page.module.css";
+import { useState } from 'react';
+
+export default function Home() {
+    const [name, setName] = useState('');
+    const [ingredients, setIngredients] = useState([{ name: '', quantity: '', unit: '' }]);
+    const [instructions, setInstructions] = useState([{ stepNumber: 1, instruction: '' }]);
+
+    const handleAddIngredient = () => {
+        setIngredients([...ingredients, { name: '', quantity: '', unit: '' }]);
+    };
+
+    const handleAddInstruction = () => {
+        setInstructions([
+        ...instructions,
+        { stepNumber: instructions.length + 1, instruction: '' },
+        ]);
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        try {
+        // 1. Create recipe
+        const recipeRes = await fetch('http://10.0.0.156:5000/api/recipes', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: name }),
+        });
+        const recipe = await recipeRes.json();
+        const recipeId = recipe.id;
+
+        // 2. Add ingredients
+        for (const ing of ingredients) {
+            await fetch('http://10.0.0.156:5000/api/ingredients', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                RecipeID: recipeId,
+                Name: ing.name,
+                Quantity: ing.quantity,
+                Unit: ing.unit,
+            }),
+            });
+        }
+
+        // 3. Add instructions
+        for (const instr of instructions) {
+            await fetch('http://10.0.0.156:5000/api/instructions', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                RecipeID: recipeId,
+                StepNumber: instr.stepNumber,
+                Instruction: instr.instruction,
+            }),
+            });
+        }
+
+        alert('Recipe added successfully!');
+        setName('');
+        setIngredients([{ name: '', quantity: '', unit: '' }]);
+        setInstructions([{ stepNumber: 1, instruction: '' }]);
+        } catch (err) {
+        console.error(err);
+        alert('Failed to add recipe');
+        }
+    };
+
+  return (
+    <div className="p-6">
+      <h1 className="text-xl font-bold mb-4">Add Recipe</h1>
+      <form onSubmit={handleSubmit} className="space-y-6">
+
+        {/* Recipe Name */}
+        <div>
+          <label className="block font-medium">Recipe Name</label>
+          <input
+            className="border p-2 w-full"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+        </div>
+
+        {/* Ingredients */}
+        <div>
+          <h2 className="font-semibold">Ingredients</h2>
+          {ingredients.map((ing, i) => (
+            <div key={i} className="flex gap-2 my-2">
+              <input
+                placeholder="Name"
+                className="border p-2 flex-1"
+                value={ing.name}
+                onChange={(e) => {
+                  const newIngs = [...ingredients];
+                  newIngs[i].name = e.target.value;
+                  setIngredients(newIngs);
+                }}
+              />
+              <input
+                placeholder="Qty"
+                className="border p-2 w-20"
+                value={ing.quantity}
+                onChange={(e) => {
+                  const newIngs = [...ingredients];
+                  newIngs[i].quantity = e.target.value;
+                  setIngredients(newIngs);
+                }}
+              />
+              <input
+                placeholder="Unit"
+                className="border p-2 w-20"
+                value={ing.unit}
+                onChange={(e) => {
+                  const newIngs = [...ingredients];
+                  newIngs[i].unit = e.target.value;
+                  setIngredients(newIngs);
+                }}
+              />
+            </div>
+          ))}
+          <button type="button" onClick={handleAddIngredient} className="text-blue-500">
+            + Add Ingredient
+          </button>
+        </div>
+
+        {/* Instructions */}
+        <div>
+          <h2 className="font-semibold">Instructions</h2>
+          {instructions.map((instr, i) => (
+            <div key={i} className="flex gap-2 my-2">
+              <span className="w-6">{instr.stepNumber}.</span>
+              <input
+                placeholder="Instruction"
+                className="border p-2 flex-1"
+                value={instr.instruction}
+                onChange={(e) => {
+                  const newInstr = [...instructions];
+                  newInstr[i].instruction = e.target.value;
+                  setInstructions(newInstr);
+                }}
+              />
+            </div>
+          ))}
+          <button type="button" onClick={handleAddInstruction} className="text-blue-500">
+            + Add Step
+          </button>
+        </div>
+
+        <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">
+          Save Recipe
+        </button>
+      </form>
+    </div>
+  );
+}
+

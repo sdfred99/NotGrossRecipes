@@ -1,0 +1,37 @@
+'use client';
+
+import styles from "./page.module.css";
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+
+
+export default function Home() {
+  const [recipes, setRecipes] = useState([]);
+
+
+  useEffect(() => {
+      fetch('http://10.0.0.156:5000/api/recipes') 
+        .then((res) => res.json())
+        .then((data) => setRecipes(data));
+    }, []);
+
+    console.log(recipes)
+
+  return (
+  <div className={styles.page}>
+    <h1>Makena's List of Not Gross Recipes</h1>
+    <h3>Seth Also Thinks They Are Not Gross</h3>
+    <h5>Some Recipes Are Peer-Reviewed</h5>
+
+    <h3>Recipe DB Calls</h3>
+    <ul>
+      {recipes.map((r) => (
+        <li key={r.RecipeID}>
+          <Link href={`/recipe/${r.RecipeID}`}>{r.name}</Link>
+        </li>
+      ))}
+    </ul>
+  </div>
+);
+}
+
