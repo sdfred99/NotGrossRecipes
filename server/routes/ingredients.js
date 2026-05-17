@@ -1,5 +1,3 @@
-'use server'
-
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
@@ -30,7 +28,7 @@ router.get('/by-recipe', (req, res) => {
     );
 });
 
-// Add an ingredient (with SQL fix)
+// Add an ingredient
 router.post('/', (req, res) => {
     const { RecipeID, Unit, Name, Quantity } = req.body;
 

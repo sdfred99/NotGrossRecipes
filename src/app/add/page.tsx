@@ -23,49 +23,50 @@ export default function Home() {
         e.preventDefault();
 
         try {
-        // 1. Create recipe
-        const recipeRes = await fetch('http://10.0.0.156:5000/api/recipes', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: name }),
-        });
-        const recipe = await recipeRes.json();
-        const recipeId = recipe.id;
+          // Create recipe
+          const recipeRes = await fetch('http://10.0.0.156:5000/api/recipes', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ name: name }),
+          });
+          const recipe = await recipeRes.json();
+          const recipeId = recipe.RecipeID;
 
-        // 2. Add ingredients
-        for (const ing of ingredients) {
-            await fetch('http://10.0.0.156:5000/api/ingredients', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                RecipeID: recipeId,
-                Name: ing.name,
-                Quantity: ing.quantity,
-                Unit: ing.unit,
-            }),
-            });
-        }
+          // Add ingredients
+          for (const ing of ingredients) {
+              await fetch('http://10.0.0.156:5000/api/ingredients', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                  RecipeID: recipeId,
+                  Name: ing.name,
+                  Quantity: ing.quantity,
+                  Unit: ing.unit,
+              }),
+              });
+          }
 
-        // 3. Add instructions
-        for (const instr of instructions) {
-            await fetch('http://10.0.0.156:5000/api/instructions', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                RecipeID: recipeId,
-                StepNumber: instr.stepNumber,
-                Instruction: instr.instruction,
-            }),
-            });
-        }
+          // Add instructions
+          for (const instr of instructions) {
+              await fetch('http://10.0.0.156:5000/api/instructions', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                  RecipeID: recipeId,
+                  StepNumber: instr.stepNumber,
+                  Instruction: instr.instruction,
+              }),
+              });
+          }
 
-        alert('Recipe added successfully!');
-        setName('');
-        setIngredients([{ name: '', quantity: '', unit: '' }]);
-        setInstructions([{ stepNumber: 1, instruction: '' }]);
-        } catch (err) {
-        console.error(err);
-        alert('Failed to add recipe');
+          alert('Recipe added successfully!');
+          setName('');
+          setIngredients([{ name: '', quantity: '', unit: '' }]);
+          setInstructions([{ stepNumber: 1, instruction: '' }]);
+        } 
+        catch (err) {
+          console.error(err);
+          alert('Failed to add recipe');
         }
     };
 
