@@ -32,11 +32,11 @@ router.get('/:recipeID', (req, res) => {
 
 // Add a recipe
 router.post('/', (req, res) => {
-  const { name } = req.body;
+  const { name, peopleServed } = req.body;
 
   db.run(
-    'INSERT INTO Recipes (Name, Deleted) VALUES (?, 0)',
-    [name.trim()],
+    'INSERT INTO Recipes (Name, Deleted, PeopleServed) VALUES (?, 0, ?)',
+    [name.trim(), peopleServed],
     function(err) {
       if (err) {
         return res.status(500).json({ error: err.message });
