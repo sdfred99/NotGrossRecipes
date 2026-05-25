@@ -2,11 +2,14 @@
 
 import { use, useEffect, useState } from 'react';
 
-export default function RecipePage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params); // ✅ Unwrap the promise safely
+type Ingredient = { RecipeID: number; Name: string; Quantity: number | string | null; Unit: string };
+type Instruction = { RecipeID: number; StepNumber: number; Instruction: string };
 
-  const [instructions, setInstructions] = useState([]);
-  const [ingredients, setIngredients] = useState([]);
+export default function RecipePage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
+
+  const [instructions, setInstructions] = useState<Instruction[]>([]);
+  const [ingredients, setIngredients] = useState<Ingredient[]>([]);
 
   useEffect(() => {
     fetch(`http://10.0.0.156:5000/api/instructions/by-recipe?recipeId=${id}`)
