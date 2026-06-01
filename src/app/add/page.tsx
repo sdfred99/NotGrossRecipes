@@ -8,6 +8,7 @@ export default function Home() {
     const unitOptions = ['tsp','tbsp','cup','g','kg','oz','lb','ml','l','pinch','pcs'];
 
     const [name, setName] = useState('');
+    const [servings, setServings] = useState('');
     const [ingredients, setIngredients] = useState([{ name: '', quantity: '', fraction: '', unit: '' }]);
     const [instructions, setInstructions] = useState([{ stepNumber: 1, instruction: '' }]);
 
@@ -30,7 +31,10 @@ export default function Home() {
           const recipeRes = await fetch('http://10.0.0.156:5000/api/recipes', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ name: name }),
+              body: JSON.stringify({ 
+                name: name, 
+                servings: servings 
+              }),
           });
           const recipe = await recipeRes.json();
           const recipeId = recipe.RecipeID;
@@ -98,6 +102,17 @@ export default function Home() {
             className="border p-2 w-full"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            required
+          />
+        </div>
+
+        <div>
+          <label className="block font-medium">How many servings?</label>
+          <input
+            type="number"
+            className="border p-2 w-full"
+            value={servings}
+            onChange={(e) => setServings(e.target.value)}
             required
           />
         </div>
