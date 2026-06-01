@@ -15,7 +15,7 @@ router.get('/', (req, res) => {
 
 // Get individual recipe
 router.get('/:recipeID', (req, res) => {
-  const { recipeID } = req.body;
+  const { recipeID } = req.params;
   db.get('SELECT * FROM recipes WHERE RecipeID = ? and Deleted = 0', 
     [recipeID], 
     (err, row) => {
@@ -32,11 +32,11 @@ router.get('/:recipeID', (req, res) => {
 
 // Add a recipe
 router.post('/', (req, res) => {
-  const { name, peopleServed } = req.body;
+  const { name, servings } = req.body;
 
   db.run(
-    'INSERT INTO Recipes (Name, Deleted, PeopleServed) VALUES (?, 0, ?)',
-    [name.trim(), peopleServed],
+    'INSERT INTO Recipes (Name, Deleted, Servings) VALUES (?, 0, ?)',
+    [name.trim(), servings],
     function(err) {
       if (err) {
         return res.status(500).json({ error: err.message });

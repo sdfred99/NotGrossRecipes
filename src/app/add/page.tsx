@@ -8,7 +8,7 @@ export default function Home() {
     const unitOptions = ['tsp','tbsp','cup','g','kg','oz','lb','ml','l','pinch','pcs'];
 
     const [name, setName] = useState('');
-    const [peopleServed, setPeopleServed] = useState('');
+    const [servings, setServings] = useState('');
     const [ingredients, setIngredients] = useState([{ name: '', quantity: '', fraction: '', unit: '' }]);
     const [instructions, setInstructions] = useState([{ stepNumber: 1, instruction: '' }]);
 
@@ -33,7 +33,7 @@ export default function Home() {
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ 
                 name: name, 
-                peopleServed: peopleServed 
+                servings: servings 
               }),
           });
           const recipe = await recipeRes.json();
@@ -107,12 +107,12 @@ export default function Home() {
         </div>
 
         <div>
-          <label className="block font-medium">How many people does this recipe serve?</label>
+          <label className="block font-medium">How many servings?</label>
           <input
             type="number"
             className="border p-2 w-full"
-            value={peopleServed}
-            onChange={(e) => setPeopleServed(e.target.value)}
+            value={servings}
+            onChange={(e) => setServings(e.target.value)}
             required
           />
         </div>
