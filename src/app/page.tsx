@@ -42,11 +42,7 @@ export default function Home() {
 
   return (
     <div className={styles.page}>
-      <h1>Makena's List of Not Gross Recipes</h1>
-      <h3>Seth Also Thinks They Are Not Gross</h3>
-      <h5>Some Recipes Are Peer-Reviewed</h5>
-
-      <h3>Recipe DB Calls</h3>
+      <h2>Recipes</h2>
       <ul>
         {recipes.map((r) => (
           <li key={r.RecipeID}>
@@ -54,6 +50,17 @@ export default function Home() {
             <button onClick={() => deleteRecipe(r.RecipeID)}>Delete</button>
           </li>
         ))}
+      </ul>
+
+      <h2>Things I Still need to do</h2>
+      <ul>
+        <li>Home page? Shows buckets but still supports search across all recipes</li>
+        <li>Bucket capabilities in the back end</li>
+        <li>Edit Capabilities: if on recipe page have edit button that open up same page thing as add recipe but at bottom (once opened edit) has delete button adn you have to confirm to delete.</li>
+        <li>Admin capabilities: Only Makena and I can edit and delete stuff when exposed to internet</li>
+        <li>General CSS stuff. Make all pages look better</li>
+        <li>Back end validation (No scripting attacks)</li>
+        <li>Figure out how to deploy</li>
       </ul>
     </div>
   );
