@@ -1,1 +1,25 @@
+:root {
+    --mint-green: #97ffcd;
+    --light-pink: #ffa4e3;
+    --green-background: #d1ffe9;
+    --dark-pink: #ff26bc;
+    --dark-charcoal: #3a3a3a;
+}
 
+@font-face {
+  font-family: 'Lucidity Condensed';
+  src: url('/fonts/lucidity-condensed/lucidity-condensed.ttf') format('truetype');
+  font-weight: 300px;
+  font-style: normal;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--green-background);
+}
+
+body {
+  font-family: 'Lucidity Condensed', sans-serif;
+  color: var(--dark-pink);
+}
